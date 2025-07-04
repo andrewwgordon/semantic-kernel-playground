@@ -1,2 +1,37 @@
 # semantic-kernel-playground
-Playground for Microsoft Semantic Kernel
+
+## Overview
+
+This project is a playground for experimenting with the Microsoft Semantic Kernel, an SDK that enables integration of AI models, plugins, and planning capabilities into Python applications. The main goal is to demonstrate how to use Semantic Kernel to build an interactive, AI-powered assistant that can control a set of smart lights through a conversational interface.
+
+## Goals
+- Showcase the integration of Microsoft Semantic Kernel with OpenAI's GPT models.
+- Demonstrate how to expose custom Python functions (plugins) to the AI for dynamic control of application logic.
+- Provide a simple, extensible example for building chat-based assistants that can interact with real or simulated devices.
+
+## Use of Microsoft Semantic Kernel
+- **Kernel**: The core orchestrator that manages plugins, services, and execution flow.
+- **Plugins**: Custom Python classes (e.g., `LightsPlugin`) that expose functions to the AI, allowing it to interact with application logic.
+- **OpenAIChatCompletion**: Connects the kernel to OpenAI's GPT models for natural language understanding and response generation.
+- **FunctionChoiceBehavior**: Enables the AI to automatically select and invoke available functions based on user input.
+- **ChatHistory**: Maintains the conversation context between the user and the assistant.
+
+## How the Code Works
+1. **Plugin Definition**: The `LightsPlugin` class defines a set of light devices and exposes two functions:
+   - `get_lights`: Returns the current state of all lights.
+   - `change_state`: Changes the state (on/off) of a specific light by ID.
+   These functions are decorated with `@kernel_function`, making them available to the AI.
+
+2. **Kernel Initialization**: The main function initializes the Semantic Kernel, adds the OpenAI chat completion service, and registers the `LightsPlugin`.
+
+3. **Chat Loop**: The program enters a loop where it accepts user input from the console. Each message is added to the chat history.
+
+4. **AI Response**: The kernel uses the OpenAI model to generate a response. If the user's message matches a function signature (e.g., asking to turn on a light), the AI can invoke the corresponding plugin function automatically.
+
+5. **Conversation Management**: The assistant's responses are printed to the console and added to the chat history, maintaining context for future interactions.
+
+6. **Exit**: Typing `exit` ends the chat session.
+
+---
+
+This playground can be extended with additional plugins, services, or more complex device logic to explore the full capabilities of Microsoft Semantic Kernel in building intelligent, interactive applications.
