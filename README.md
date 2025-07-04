@@ -34,4 +34,61 @@ This project is a playground for experimenting with the Microsoft Semantic Kerne
 
 ---
 
+## Installation and Setup
+
+This project uses [uv](https://github.com/astral-sh/uv) for fast Python package management. Make sure you have Python 3.9+ and uv installed.
+
+### 1. Install uv
+
+If you don't have uv, install it with:
+
+```bash
+pip install uv
+```
+
+### 2. Install dependencies
+
+From the project root directory, run:
+
+```bash
+uv pip install -r requirements.txt
+```
+
+Or, if you are using a `pyproject.toml` (recommended):
+
+```bash
+uv pip install -r uv.lock
+```
+
+### 3. Set up environment variables
+
+You need an OpenAI API key. Set it in your environment:
+
+```bash
+export OPENAI_API_KEY=your_openai_api_key_here
+```
+
+You can add this line to your `.env` or shell profile for convenience.
+
+---
+
+## Running the Program
+
+To start the chat assistant, run:
+
+```bash
+uv pip install .  # (if you want to install as a package, optional)
+uv python main.py
+```
+
+You will see a prompt:
+
+```
+User >
+```
+
+Type your commands (e.g., "Turn on the table lamp"), and the assistant will respond. Type `exit` to quit.
+
+---
+
 This playground can be extended with additional plugins, services, or more complex device logic to explore the full capabilities of Microsoft Semantic Kernel in building intelligent, interactive applications.
