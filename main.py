@@ -5,16 +5,21 @@ from semantic_kernel import Kernel
 from semantic_kernel.utils.logging import setup_logging
 from semantic_kernel.functions import kernel_function
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
-from semantic_kernel.connectors.ai.function_choice_behavior import FunctionChoiceBehavior
-from semantic_kernel.connectors.ai.chat_completion_client_base import ChatCompletionClientBase
+from semantic_kernel.connectors.ai.function_choice_behavior import (
+    FunctionChoiceBehavior,
+)
+from semantic_kernel.connectors.ai.chat_completion_client_base import (
+    ChatCompletionClientBase,
+)
 from semantic_kernel.contents.chat_history import ChatHistory
 from semantic_kernel.functions.kernel_arguments import KernelArguments
 
 from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_prompt_execution_settings import (
-    AzureChatPromptExecutionSettings
+    AzureChatPromptExecutionSettings,
 )
 from typing import Annotated
 from semantic_kernel.functions import kernel_function
+
 
 # Plugin class to manage a set of lights and expose control functions to the kernel
 class LightsPlugin:
@@ -59,8 +64,7 @@ async def main():
 
     # Add Azure OpenAI chat completion service to the kernel
     chat_completion = OpenAIChatCompletion(
-        ai_model_id="gpt-4.1-mini",
-        api_key=environ["OPENAI_API_KEY"]
+        ai_model_id="gpt-4.1-mini", api_key=environ["OPENAI_API_KEY"]
     )
     kernel.add_service(chat_completion)
 
@@ -106,6 +110,7 @@ async def main():
 
         # Add the AI's message to the chat history
         history.add_message(result)
+
 
 # Run the main function if this script is executed directly
 if __name__ == "__main__":
