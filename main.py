@@ -37,7 +37,12 @@ class LightsPlugin:
     def get_state(
         self,
     ) -> str:
-        """Gets a list of lights and their current state."""
+        """
+        Returns a list of all lights and their current state.
+
+        Returns:
+            str: A list of dictionaries representing each light and its state.
+        """
         return self.lights
 
     @kernel_function(
@@ -49,7 +54,16 @@ class LightsPlugin:
         id: int,
         is_on: bool,
     ) -> str:
-        """Changes the state of the light with the given id."""
+        """
+        Changes the state (on/off) of the light with the given id.
+
+        Args:
+            id (int): The ID of the light to change.
+            is_on (bool): The new state for the light (True for on, False for off).
+
+        Returns:
+            str: The updated light dictionary if found, otherwise None.
+        """
         for light in self.lights:
             if light["id"] == id:
                 light["is_on"] = is_on
@@ -59,6 +73,11 @@ class LightsPlugin:
 
 # Main asynchronous function to run the chat-based light control
 async def main():
+    """
+    Main entry point for the chat-based light control assistant.
+    Initializes the kernel, sets up the OpenAI chat completion service, registers plugins,
+    and starts a chat loop to interact with the user for controlling lights.
+    """
     # Initialize the kernel
     kernel = Kernel()
 
