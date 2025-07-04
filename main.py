@@ -1,3 +1,16 @@
+"""
+semantic-kernel-playground
+
+This module demonstrates the use of Microsoft Semantic Kernel to build a chat-based assistant that can control a set of smart lights.
+
+Features:
+- Defines a plugin (`LightsPlugin`) to manage and control light devices.
+- Integrates with OpenAI's GPT models for natural language understanding.
+- Exposes plugin functions to the AI for dynamic invocation based on user input.
+- Maintains chat history and context for interactive conversations.
+
+Run this script to start a console-based assistant that can turn lights on/off and report their status using natural language commands.
+"""
 import asyncio
 import logging
 from os import environ
@@ -8,21 +21,20 @@ from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 from semantic_kernel.connectors.ai.function_choice_behavior import (
     FunctionChoiceBehavior,
 )
-from semantic_kernel.connectors.ai.chat_completion_client_base import (
-    ChatCompletionClientBase,
-)
 from semantic_kernel.contents.chat_history import ChatHistory
-from semantic_kernel.functions.kernel_arguments import KernelArguments
-
 from semantic_kernel.connectors.ai.open_ai.prompt_execution_settings.azure_chat_prompt_execution_settings import (
     AzureChatPromptExecutionSettings,
 )
-from typing import Annotated
-from semantic_kernel.functions import kernel_function
-
 
 # Plugin class to manage a set of lights and expose control functions to the kernel
 class LightsPlugin:
+    """
+    Plugin class to manage a set of smart lights and expose control functions to the Semantic Kernel.
+
+    This class simulates a collection of light devices, allowing their states to be queried and changed.
+    The methods are decorated as kernel functions so they can be invoked by the AI assistant.
+    """
+
     # List of light devices with their state
     lights = [
         {"id": 1, "name": "Table Lamp", "is_on": False},
@@ -36,12 +48,12 @@ class LightsPlugin:
     )
     def get_state(
         self,
-    ) -> str:
+    ) -> list:
         """
         Returns a list of all lights and their current state.
 
         Returns:
-            str: A list of dictionaries representing each light and its state.
+            list: A list of dictionaries representing each light and its state.
         """
         return self.lights
 
@@ -51,25 +63,24 @@ class LightsPlugin:
     )
     def change_state(
         self,
-        id: int,
+        light_id: int,
         is_on: bool,
-    ) -> str:
+    ) -> dict | None:
         """
-        Changes the state (on/off) of the light with the given id.
+        Changes the state (on/off) of the light with the given light_id.
 
         Args:
-            id (int): The ID of the light to change.
+            light_id (int): The ID of the light to change.
             is_on (bool): The new state for the light (True for on, False for off).
 
         Returns:
-            str: The updated light dictionary if found, otherwise None.
+            dict | None: The updated light dictionary if found, otherwise None.
         """
         for light in self.lights:
-            if light["id"] == id:
+            if light["id"] == light_id:
                 light["is_on"] = is_on
                 return light
         return None
-
 
 # Main asynchronous function to run the chat-based light control
 async def main():
@@ -83,7 +94,8 @@ async def main():
 
     # Add Azure OpenAI chat completion service to the kernel
     chat_completion = OpenAIChatCompletion(
-        ai_model_id="gpt-4.1-mini", api_key=environ["OPENAI_API_KEY"]
+        ai_model_id="gpt-4.1-mini",
+        api_key=environ["OPENAI_API_KEY"]
     )
     kernel.add_service(chat_completion)
 
@@ -105,17 +117,17 @@ async def main():
     history = ChatHistory()
 
     # Start a chat loop with the user
-    userInput = None
+    user_input = None
     while True:
         # Collect user input from the console
-        userInput = input("User > ")
+        user_input = input("User > ")
 
         # Exit the loop if the user types "exit"
-        if userInput == "exit":
+        if user_input == "exit":
             break
 
         # Add the user's message to the chat history
-        history.add_user_message(userInput)
+        history.add_user_message(user_input)
 
         # Get the AI's response using the chat completion service
         result = await chat_completion.get_chat_message_content(
@@ -129,7 +141,6 @@ async def main():
 
         # Add the AI's message to the chat history
         history.add_message(result)
-
 
 # Run the main function if this script is executed directly
 if __name__ == "__main__":
